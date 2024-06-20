@@ -1,16 +1,18 @@
 import { z } from "zod";
 import { USER_Role } from "./user.constant";
 
-const createAdminValidations = z.object({
+const createUserValidations = z.object({
   body: z.object({
     name: z.string(),
-    role: z.nativeEnum(USER_Role).default(USER_Role.admin),
+    role: z.nativeEnum(USER_Role).default(USER_Role.user),
     email: z.string().email(),
     phone: z.string(),
     address: z.string(),
     password: z.string(),
   }),
 });
+
+
 const updateUserValidations = z.object({
   body: z.object({
     name: z.string().optional(),
@@ -21,6 +23,6 @@ const updateUserValidations = z.object({
 });
 
 export const UserValidations = {
-  createAdminValidations,
+  createUserValidations,
   updateUserValidations,
 };

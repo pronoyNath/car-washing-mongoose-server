@@ -6,10 +6,10 @@ import { UserControllers } from './user.controller';
 const router = express.Router();
 
 router.post(
-  '/create-admin',
+  '/signup',
   // auth(USER_ROLE.admin),
-  validateRequest(UserValidations.createAdminValidations),
-  UserControllers.createAdmin,
+  validateRequest(UserValidations.createUserValidations),
+  UserControllers.createUser,
 );
 
 export const UserRoutes = router;
