@@ -26,7 +26,7 @@ const signup = async (payload: TUser): Promise<any> => {
 
 const login = async (payload: TLoginUser) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
-console.log(user);
+
   if (!user) {
     throw new Error("User not found");
   }

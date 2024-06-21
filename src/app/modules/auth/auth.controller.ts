@@ -14,7 +14,7 @@ const signup = catchAsync(async (req, res) => {
 
 const login = catchAsync(async (req, res) => {
   const { accessToken, refreshToken } = await AuthServices.login(req.body);
-  console.log("asche");
+
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: config.NODE_ENV === "production",
