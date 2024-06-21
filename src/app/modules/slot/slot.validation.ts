@@ -11,6 +11,8 @@ const slotValidationSchema = z.object({
     role: z.nativeEnum(SLOT_BookedType).default(SLOT_BookedType.available),
   }),
 });
+
+
 const slotUpdateValidationSchema = z.object({
   body: z.object({
     date: z.string(),

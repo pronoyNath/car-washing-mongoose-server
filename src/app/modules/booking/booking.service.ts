@@ -1,0 +1,100 @@
+import httpStatus from "http-status";
+import { AppError } from "../../errors/AppError";
+import { Service } from "../service/service.model";
+import { TBooking } from "./booking.interface";
+import { Booking } from "./booking.model";
+import { Slot } from "../slot/slot.model";
+import { User } from "../user/user.model";
+
+const createBookingIntoDB = async (payload: TBooking, userEmail: string) => {
+  const isServiceExists = await Service.findOne({
+    _id: payload?.serviceId,
+  });
+
+  if (!isServiceExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This service is no found!");
+  }
+
+  const isSlotExists = await Slot.findOne({
+    _id: payload?.slotId,
+  });
+
+  if (!isSlotExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Slot is no found!");
+  }
+
+  if (isSlotExists?.isBooked !== "available") {
+    throw new AppError(httpStatus.BAD_REQUEST, "This Slot is not available!");
+  }
+
+  const booking = await Booking.create(payload);
+
+  // Update the slot to booked
+  isSlotExists.isBooked = "booked";
+  await isSlotExists.save();
+
+  // Populate the booking with serviceId and slotId
+  const populatedBooking = await Booking.findById(booking._id)
+    .populate("serviceId")
+    .populate("slotId");
+
+  // Get user details
+  const userDetails = await User.findOne({ email: userEmail }).select(
+    "-password -__v"
+  );
+
+  let responseData: Record<string, unknown> = {};
+
+  if (populatedBooking) {
+    responseData = {
+      ...(populatedBooking.toObject() as Record<string, unknown>),
+      customer: userDetails
+    };
+  }
+  
+  return responseData;
+  
+}
+// const getSingleServiceFromDB = async (id: string) => {
+//   const result = await Service.findById(id);
+
+//   return result;
+// };
+
+// const getAllServicesFromDB = async () => {
+//   const result = Service.find();
+//   return result;
+// };
+
+// const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
+//   const result = await Service.findOneAndUpdate({ _id: id }, payload, {
+//     new: true,
+//   });
+//   return result;
+// };
+
+// const deleteServiceFromDB = async (id: string) => {
+
+//   const isExits = await Service.findById(id);
+
+//   if(!isExits){
+//     throw new AppError(httpStatus.BAD_REQUEST, "NO servive available!");
+//   }
+
+//   const result = await Service.findByIdAndUpdate(
+//     id,
+//     { isDeleted: true },
+//     {
+//       new: true,
+//     }
+//   );
+//   return result;
+// };
+
+export const BookingServices = {
+  createBookingIntoDB,
+  //   getSingleServiceFromDB,
+  //   getAllServicesFromDB,
+  //   updateServiceIntoDB,
+  //   deleteServiceFromDB
+};

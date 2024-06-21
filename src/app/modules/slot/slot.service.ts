@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from "http-status";
+import { AppError } from "../../errors/AppError";
+import { Service } from "../service/service.model";
 import { TSlot } from "./slot.interface";
 import { Slot } from "./slot.model";
 
 const createSlotIntoDB = async (payload: TSlot) => {
   const serviceDuration = 60; // Service duration in minutes
   const { service, date, startTime, endTime } = payload;
+
+  // check if the service is  exits!
+  const isServiceExists = await Service.findOne({
+    _id: service,
+  });
+
+  if (!isServiceExists) {
+    throw new AppError(httpStatus.CONFLICT, "This service is no found!");
+  }
 
   // Helper function to convert "HH:MM" to minutes since midnight
   const timeToMinutes = (time: string): number => {

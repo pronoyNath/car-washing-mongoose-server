@@ -11,7 +11,7 @@ export const auth = (...requiredRoles: (keyof typeof USER_Role)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authorizationHeader = req.headers.authorization;
 
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
       throw new AppError(401, "You are not authorized to access this route");
     }
     //remove Bearer from token
@@ -44,6 +44,8 @@ export const auth = (...requiredRoles: (keyof typeof USER_Role)[]) => {
       throw new AppError(401, "You are not authorized to access this route");
     }
 
+    // set user to express request
+    req.user = verfiedToken as JwtPayload;
     next();
   });
 };
