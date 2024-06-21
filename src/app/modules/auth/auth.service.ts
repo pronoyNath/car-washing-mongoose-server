@@ -1,13 +1,13 @@
-import { isPasswordMatched } from "./auth.util";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { USER_Role } from "../user/user.constants";
 import { TUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import jwt from "jsonwebtoken";
 import config from "../../config";
+// import { USER_Role } from "../user/user.constant";
+import { isPasswordMatched } from "./auth.utils";
 
-const register = async (payload: TUser): Promise<any> => {
+const signup = async (payload: TUser): Promise<any> => {
   //user existence check
   const user = await User.findOne({ email: payload.email });
 
@@ -16,7 +16,7 @@ const register = async (payload: TUser): Promise<any> => {
   }
 
   //set user role
-  payload.role = USER_Role.USER;
+  // payload.role = USER_Role.user;
 
   //create user
   const newUser = await User.create(payload);
@@ -26,13 +26,9 @@ const register = async (payload: TUser): Promise<any> => {
 
 const login = async (payload: TLoginUser) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
-
+console.log(user);
   if (!user) {
     throw new Error("User not found");
-  }
-
-  if (user.status === "BLOCKED") {
-    throw new Error("User is blocked");
   }
 
   const passwordMatch = await isPasswordMatched(
@@ -68,6 +64,6 @@ const login = async (payload: TLoginUser) => {
 };
 
 export const AuthServices = {
-  register,
+  signup,
   login,
 };

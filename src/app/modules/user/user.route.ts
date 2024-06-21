@@ -12,4 +12,11 @@ router.post(
   UserControllers.createUser,
 );
 
+// router.post(
+//   '/login',
+//   // auth(USER_ROLE.admin),
+//   validateRequest(UserValidations.createUserValidations),
+//   UserControllers.createUser,
+// );
+
 export const UserRoutes = router;

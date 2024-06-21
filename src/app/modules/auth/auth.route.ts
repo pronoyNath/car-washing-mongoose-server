@@ -1,20 +1,20 @@
-//  /create-admin, superAdmin,admin post
-// /:authid- admin, superadmin put
-// /:authid-  get
-// /me - auth own data. put
-//
-
 import express from "express";
 import { authControllers } from "./auth.controller";
+import validateRequest from "../../middlewares/validateRequest";
+import { AuthValidation } from "./auth.validation";
 
 const router = express.Router();
 
-router.post("/register", authControllers.register);
-router.post("/login", authControllers.login);
+
+router.post(
+  "/signup",
+  validateRequest(AuthValidation.signupValidationSchema),
+  authControllers.signup
+);
+router.post(
+  "/login",
+  // validateRequest(AuthValidation.loginValidationSchema),
+  authControllers.login
+);
 
 export const AuthRoutes = router;
-
-//login /api/auth/login
-//register /api/auths/create-student : /api/auth/register
-//forgot password /api/auth/forgot-password
-//refresh token /api/auth/refresh-token
