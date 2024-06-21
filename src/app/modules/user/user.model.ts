@@ -36,6 +36,9 @@ const userSchema = new Schema<TUser>({
   passwordChangedAt: {
     type: Date,
   },
+},
+{
+  timestamps: true,
 });
 
 userSchema.pre("save", async function (next) {
