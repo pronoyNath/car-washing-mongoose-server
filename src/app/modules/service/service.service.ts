@@ -1,6 +1,5 @@
 import { TService } from "./service.interface";
 import { Service } from "./service.model";
-import { User } from "../user/user.model";
 import httpStatus from "http-status";
 import { AppError } from "../../errors/AppError";
 
@@ -30,7 +29,6 @@ const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
 const deleteServiceFromDB = async (id: string) => {
 
   const isExits = await Service.findById(id);
-  console.log("---->",isExits);
 
   if(!isExits){
     throw new AppError(httpStatus.BAD_REQUEST, "NO servive available!");
