@@ -2,17 +2,23 @@ import { TService } from "./service.interface";
 import { Service } from "./service.model";
 
 const createServiceIntoDB = async (payload: TService) => {
-    const service = await Service.create(payload);
-    return service;
-  };
-  
-  const getSingleServiceFromDB = async (id: string) => {
-    const result = await Service.findById(id)
-      
-    return result;
-  };
+  const service = await Service.create(payload);
+  return service;
+};
 
-  export const ServiceServices = {
-    createServiceIntoDB,
-    getSingleServiceFromDB
-  }
+const getSingleServiceFromDB = async (id: string) => {
+  const result = await Service.findById(id);
+
+  return result;
+};
+
+const getAllServicesFromDB = async () => {
+  const result = Service.find();
+  return result;
+};
+
+export const ServiceServices = {
+  createServiceIntoDB,
+  getSingleServiceFromDB,
+  getAllServicesFromDB,
+};

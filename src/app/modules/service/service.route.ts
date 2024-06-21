@@ -8,13 +8,12 @@ import { USER_Role } from "../user/user.constant";
 const router = express.Router();
 
 router.post(
-  "/",auth(USER_Role.admin),
+  "/",
+  auth(USER_Role.admin),
   validateRequest(ServiceValidation.serviceValidationSchema),
   ServiceControllers.createService
 );
-router.get(
-  "/:id",
-  ServiceControllers.getSingleService
-);
+router.get("/:id", ServiceControllers.getSingleService);
+router.get("/", ServiceControllers.getAllServices);
 
 export const ServiceRoutes = router;
