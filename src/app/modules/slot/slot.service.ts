@@ -3,7 +3,6 @@ import { TSlot } from "./slot.interface";
 import { Slot } from "./slot.model";
 
 const createSlotIntoDB = async (payload: TSlot) => {
-
   const serviceDuration = 60; // Service duration in minutes
   const { service, date, startTime, endTime } = payload;
 
@@ -43,8 +42,7 @@ const createSlotIntoDB = async (payload: TSlot) => {
   }
 
   return createdSlots;
-}
-
+};
 
 // };
 
@@ -54,10 +52,16 @@ const createSlotIntoDB = async (payload: TSlot) => {
 //   return result;
 // };
 
-// const getAllServicesFromDB = async () => {
-//   const result = Service.find();
-//   return result;
-// };
+const getAllSlotsFromDB = async (query: Record<string, unknown>) => {
+  const { date, serviceId } = query;
+
+  // Build the query object based on the presence of optional parameters
+  const dbQuery: Record<string, unknown> = {};
+  if (date) dbQuery.date = date;
+  if (serviceId) dbQuery.service = serviceId;
+  const result = await Slot.find(dbQuery).populate("service");
+  return result;
+};
 
 // const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
 //   const result = await Service.findOneAndUpdate({ _id: id }, payload, {
@@ -87,7 +91,7 @@ const createSlotIntoDB = async (payload: TSlot) => {
 export const SlotServices = {
   createSlotIntoDB,
   //   getSingleServiceFromDB,
-  //   getAllServicesFromDB,
+  getAllSlotsFromDB,
   //   updateServiceIntoDB,
   //   deleteServiceFromDB,
 };

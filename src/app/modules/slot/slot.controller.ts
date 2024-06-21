@@ -26,16 +26,17 @@ const createSlot = catchAsync(async (req, res) => {
 //   });
 // });
 
-// const getAllServices = catchAsync(async (req, res) => {
-//   const result = await ServiceServices.getAllServicesFromDB();
+const getAllSlots = catchAsync(async (req, res) => {
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Services retrieve sucessfully",
-//     data: result,
-//   });
-// });
+  const result = await SlotServices.getAllSlotsFromDB(req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Slots retrieve sucessfully",
+    data: result,
+  });
+});
 
 // const updateSevice = catchAsync(async (req, res) => {
 //   const { id } = req.params;
@@ -57,8 +58,6 @@ const createSlot = catchAsync(async (req, res) => {
 //     const { id } = req.params;
 //     const result = await ServiceServices.deleteServiceFromDB(id);
 
-  
-
 //     sendResponse(res, {
 //       statusCode: httpStatus.OK,
 //       success: true,
@@ -69,9 +68,9 @@ const createSlot = catchAsync(async (req, res) => {
 // );
 
 export const SlotControllers = {
-    createSlot,
-//   getSingleService,
-//   getAllServices,
-//   updateSevice,
-//   deleteService
+  createSlot,
+  //   getSingleService,
+  getAllSlots,
+  //   updateSevice,
+  //   deleteService
 };

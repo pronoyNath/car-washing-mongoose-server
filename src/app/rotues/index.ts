@@ -18,6 +18,10 @@ const moduleRoutes = [
     path: "/services/slots",
     route: SlotRoutes,
   },
+  {
+    path: "/slots",
+    route: SlotRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
