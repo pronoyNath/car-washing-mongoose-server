@@ -18,18 +18,28 @@ const getAllSlots = catchAsync(async (req, res) => {
 
   const result = await SlotServices.getAllSlotsFromDB(req.query);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Slots retrieve sucessfully",
-    data: result,
-  });
+  if (result.length > 0) {
+    // Send success response with data
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Slots retrieve sucessfully",
+      data: result,
+    });
+  } else {
+    // Send failure response indicating no data found
+    sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "No Data Found",
+      data: [],
+    });
+  }
+
+
 });
 
 export const SlotControllers = {
   createSlot,
-  //   getSingleService,
   getAllSlots,
-  //   updateSevice,
-  //   deleteService
 };

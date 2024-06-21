@@ -31,7 +31,7 @@ export const auth = (...requiredRoles: (keyof typeof USER_Role)[]) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new AppError(401, "User not found");
+      throw new AppError(401, "You have no access to this route");
     }
 
     const isDeleted = user?.isDeleted;

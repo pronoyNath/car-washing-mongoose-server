@@ -18,23 +18,49 @@ const getSingleService = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await ServiceServices.getSingleServiceFromDB(id);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Service retrieve succesfully",
-    data: result,
-  });
+  if (result) {
+    // Send success response with data
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Service retrieve succesfully",
+      data: result,
+    });
+  } else {
+    // Send failure response indicating no data found
+    sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "No Data Found",
+      data: [],
+    });
+  }
+
+
 });
 
 const getAllServices = catchAsync(async (req, res) => {
   const result = await ServiceServices.getAllServicesFromDB();
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Services retrieve sucessfully",
-    data: result,
-  });
+
+  if (result.length > 0) {
+    // Send success response with data
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Services retrieve sucessfully",
+      data: result,
+    });
+  } else {
+    // Send failure response indicating no data found
+    sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "No Data Found",
+      data: [],
+    });
+  }
+
 });
 
 const updateSevice = catchAsync(async (req, res) => {
