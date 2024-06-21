@@ -27,6 +27,17 @@ const createBookingIntoDB = async (payload: TBooking, userEmail: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "This Slot is not available!");
   }
 
+  const userDetails = await User.findOne({ email: userEmail }).select(
+    "-password -__v"
+  );
+
+  if (!userDetails) {
+    // Handle case where user details are not found
+    throw new AppError(httpStatus.BAD_REQUEST, "User not found!");
+  }
+
+  // set the customer details to booking data
+  payload.customer = userDetails._id;
   const booking = await Booking.create(payload);
 
   // Update the slot to booked
@@ -36,35 +47,24 @@ const createBookingIntoDB = async (payload: TBooking, userEmail: string) => {
   // Populate the booking with serviceId and slotId
   const populatedBooking = await Booking.findById(booking._id)
     .populate("serviceId")
-    .populate("slotId");
+    .populate("slotId")
+    .populate("customer");
 
-  // Get user details
-  const userDetails = await User.findOne({ email: userEmail }).select(
-    "-password -__v"
-  );
-
-  let responseData: Record<string, unknown> = {};
-
-  if (populatedBooking) {
-    responseData = {
-      ...(populatedBooking.toObject() as Record<string, unknown>),
-      customer: userDetails
-    };
-  }
-  
-  return responseData;
-  
-}
+  return populatedBooking;
+};
 // const getSingleServiceFromDB = async (id: string) => {
 //   const result = await Service.findById(id);
 
 //   return result;
 // };
 
-// const getAllServicesFromDB = async () => {
-//   const result = Service.find();
-//   return result;
-// };
+const getAllBookingsFromDB = async () => {
+  const result = Booking.find()
+    .populate("serviceId")
+    .populate("slotId")
+    .populate("customer");
+  return result;
+};
 
 // const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
 //   const result = await Service.findOneAndUpdate({ _id: id }, payload, {
@@ -93,8 +93,5 @@ const createBookingIntoDB = async (payload: TBooking, userEmail: string) => {
 
 export const BookingServices = {
   createBookingIntoDB,
-  //   getSingleServiceFromDB,
-  //   getAllServicesFromDB,
-  //   updateServiceIntoDB,
-  //   deleteServiceFromDB
+  getAllBookingsFromDB,
 };

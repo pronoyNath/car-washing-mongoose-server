@@ -14,22 +14,19 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
-// const getAllSlots = catchAsync(async (req, res) => {
+const getAllBookings = catchAsync(async (req, res) => {
 
-//   const result = await SlotServices.getAllSlotsFromDB(req.query);
+  const result = await BookingServices.getAllBookingsFromDB();
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Slots retrieve sucessfully",
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Bookings retrieve sucessfully",
+    data: result,
+  });
+});
 
 export const BookingControllers = {
     createBooking,
-  //   getSingleService,
-//   getAllSlots,
-  //   updateSevice,
-  //   deleteService
+    getAllBookings
 };
