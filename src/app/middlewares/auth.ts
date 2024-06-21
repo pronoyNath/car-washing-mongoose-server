@@ -9,7 +9,9 @@ import { User } from "../modules/user/user.model";
 export const auth = (...requiredRoles: (keyof typeof USER_Role)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authorizationHeader = req.headers.authorization;
-
+    if (!authorizationHeader) {
+      throw new AppError(401, "You are not authorized to access this route");
+    }
     //remove Bearer from token
     const accessToken = (authorizationHeader as string).split(" ")[1];
 

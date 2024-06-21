@@ -15,6 +15,6 @@ router.post(
 );
 router.get("/:id", ServiceControllers.getSingleService);
 router.get("/", ServiceControllers.getAllServices);
-router.put("/:id", ServiceControllers.updateSevice);
+router.put("/:id", auth(USER_Role.admin), ServiceControllers.updateSevice);
 
 export const ServiceRoutes = router;
