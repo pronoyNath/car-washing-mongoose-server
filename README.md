@@ -79,4 +79,4 @@ Make sure you have the following installed:
    ```
 
 
-<div align="center">Thanks for visiting!</div>
+<div align="center">Thanks for visiting! and welcome</div>
